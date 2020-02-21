@@ -1,0 +1,9 @@
+.mat-card {
+  margin: 20px
+}
+
+.overflow {
+  min-height: 60px;
+  max-height: calc(100vh - 235px);
+  overflow-y: auto;
+}

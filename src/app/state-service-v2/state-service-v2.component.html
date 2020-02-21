@@ -1,0 +1,44 @@
+<div fxFlex fxFlexAlign="row" *ngIf="(currentState$ | async) as vm">
+
+  <mat-card fxFlex >
+    <mat-card-header>
+      <mat-card-title>
+        Users
+        <button mat-icon-button (click)="addUserEvent$.next($event)" [disabled]="vm.adding"><mat-icon>add</mat-icon></button>
+        <mat-spinner *ngIf="vm.adding" [diameter]="20" strokeWidth="2"></mat-spinner>
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content class="overflow">
+      <ng-container *ngIf="!vm.loading; else loading">
+
+        <mat-list>
+          <mat-list-item *ngFor="let user of vm.users">
+            <mat-icon mat-list-icon>face</mat-icon>
+            <h4 mat-line>{{user.name}}</h4>
+            <p mat-line> {{user.email}} | {{user.dateAdded | date}} </p>
+          </mat-list-item>
+        </mat-list>
+      </ng-container>
+      <ng-template #loading>
+        <mat-spinner style="margin:0 auto;" [diameter]="50" strokeWidth="5"></mat-spinner>
+      </ng-template>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-flat-button>Clear All</button>
+    </mat-card-actions>
+  </mat-card>
+
+  <mat-card fxFlex>
+    <mat-card-header>
+      <mat-card-title>
+        Current state
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-form-field fxFlex>
+        <textarea matInput [matTextareaAutosize]="true" [value]="vm | json"></textarea>
+      </mat-form-field>
+    </mat-card-content>
+  </mat-card>
+</div>

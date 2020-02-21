@@ -1,0 +1,21 @@
+<h1 *ngIf="loading$ |async">Loading......</h1>
+<div>
+  <h2>Current State</h2>
+  <p>{{stateService.state$ | async | json}}</p>
+</div>
+<div>
+  <h2>history</h2>
+  <ul>
+    <li *ngFor="let history of stateService.history$ |async">
+      {{history | json}}
+    </li>
+  </ul>
+</div>
+
+<ul>
+  <h2>Todos</h2>
+  <li *ngFor="let todo of todos$ |async">{{todo.title}}</li>
+</ul>
+
+<button (click)="load()">Load Data</button>
+<button (click)="clear()">clear</button>
