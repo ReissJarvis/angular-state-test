@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { delay, map, mapTo, tap } from 'rxjs/operators';
 
-import { User } from '../shared/models/user.model';
+import { User } from '../models/user.model';
 import { RandomUserGenerator } from './random-user.generator';
 
 interface UserFilter {

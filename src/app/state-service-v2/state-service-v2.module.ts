@@ -4,10 +4,8 @@ import { Route, RouterModule } from '@angular/router';
 import { MatDialogModule, MatInputModule, MatSnackBarModule } from '@angular/material';
 import { ReactiveFormsModule } from '@angular/forms';
 
-
+import { UserService, MaterialModule } from '@shared/index';
 import { StateServiceV2Component } from './state-service-v2.component';
-import { MaterialModule } from '../shared/modules/material.module';
-import { UserService } from './user.service';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 
 const routes: Route[] = [

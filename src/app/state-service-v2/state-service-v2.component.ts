@@ -3,11 +3,10 @@ import { MatDialog } from '@angular/material';
 import { Observable, Subject } from 'rxjs';
 import { filter, flatMap, map, tap } from 'rxjs/operators';
 
-import { StateV2Service } from './state-v2.service';
-import { RandomUserGenerator } from './random-user.generator';
-import { UserService } from './user.service';
-import { User } from '../shared/models/user.model';
+import { UserService, User, RandomUserGenerator } from '@shared/index';
+
 import { ConfirmationDialogComponent, ConfirmationDialogData } from './components/confirmation-dialog/confirmation-dialog.component';
+import { StateV2Service } from './state-v2.service';
 
 interface V2PageState {
   loading: boolean;
