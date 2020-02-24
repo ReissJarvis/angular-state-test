@@ -1,12 +1,12 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { StateV2Service } from './state-v2.service';
+import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material';
+import { Observable, Subject } from 'rxjs';
 import { filter, flatMap, map, tap } from 'rxjs/operators';
-import { stringify } from 'querystring';
+
+import { StateV2Service } from './state-v2.service';
 import { RandomUserGenerator } from './random-user.generator';
 import { UserService } from './user.service';
 import { User } from '../shared/models/user.model';
-import { Observable, Subject } from 'rxjs';
-import { MatDialog } from '@angular/material';
 import { ConfirmationDialogComponent, ConfirmationDialogData } from './components/confirmation-dialog/confirmation-dialog.component';
 
 interface V2PageState {

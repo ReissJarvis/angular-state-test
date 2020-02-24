@@ -1,8 +1,8 @@
 import { Injectable, OnDestroy } from '@angular/core';
+import { MatSnackBar } from '@angular/material';
 import { ConnectableObservable, merge, Observable, OperatorFunction, pipe, queueScheduler, Subject, Subscription } from 'rxjs';
 import { distinctUntilChanged, filter, map, mergeAll, observeOn, publishReplay, scan, shareReplay } from 'rxjs/operators';
 import { pipeFromArray } from 'rxjs/internal/util/pipe';
-import { MatSnackBar } from '@angular/material';
 
 export function select<T>(...ops: OperatorFunction<T, any>[]) {
   return pipe(
