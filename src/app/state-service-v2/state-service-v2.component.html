@@ -11,21 +11,32 @@
 
     <mat-card-content class="overflow">
       <ng-container *ngIf="!vm.loading; else loading">
-
         <mat-list>
           <mat-list-item *ngFor="let user of vm.users">
             <mat-icon mat-list-icon>face</mat-icon>
             <h4 mat-line>{{user.name}}</h4>
             <p mat-line> {{user.email}} | {{user.dateAdded | date}} </p>
+            <mat-icon *ngIf="vm.deletingUserId !== user.id else deleting" style="cursor: pointer" (click)="this.deleteUserEvent$.next(user)">delete</mat-icon>
+            <ng-template #deleting>
+              <mat-spinner [diameter]="20" strokeWidth="2"></mat-spinner>
+            </ng-template>
           </mat-list-item>
         </mat-list>
+
+        <ng-container *ngIf="vm.users.length == 0" >
+          <div class="no-users">
+            <mat-icon>sentiment_very_dissatisfied</mat-icon> <span>No users</span>
+          </div>
+        </ng-container>
       </ng-container>
+
       <ng-template #loading>
         <mat-spinner style="margin:0 auto;" [diameter]="50" strokeWidth="5"></mat-spinner>
       </ng-template>
     </mat-card-content>
     <mat-card-actions>
-      <button mat-flat-button>Clear All</button>
+      <button mat-flat-button (click)="clearUsersEffect$.next($event)">Clear All</button>
+      <button mat-flat-button (click)="clearUsersEffect$.next($event)">Get users</button>
     </mat-card-actions>
   </mat-card>
 

@@ -88,6 +88,7 @@ export class StateV2Service<T> implements OnDestroy {
   }
 
   ngOnDestroy(): void {
+    console.log("destroyed")
     this._subscription.unsubscribe();
   }
 }

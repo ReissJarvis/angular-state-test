@@ -11,12 +11,13 @@ interface V2PageState {
   loading: boolean;
   users: User[];
   adding: boolean;
+  deletingUserId?: number;
 }
 
 const initialState: V2PageState = {
   loading: false,
   users: [],
-  adding: false
+  adding: false,
 }
 
 @Component({
@@ -28,12 +29,25 @@ const initialState: V2PageState = {
 export class StateServiceV2Component implements OnInit {
   currentState$: Observable<V2PageState> = this.vm.select();
   fetchUsersEffect$ = new Subject();
-  addUserEvent$ = new Subject<Event>()
+  clearUsersEffect$ = new Subject<Event>();
+  addUserEvent$ = new Subject<Event>();
+  deleteUserEvent$ = new Subject<User>();
+
 
   constructor(private vm: StateV2Service<V2PageState>, private userService: UserService) {
-    this.userService._populateStubData(3)
+    this.userService._populateStubData(3);
+  }
 
-    vm.connectEffect(
+  ngOnInit() {
+    this.vm.setState(initialState);
+
+    this.setupEffects();
+
+    this.fetchUsersEffect$.next();
+  }
+
+  setupEffects() {
+    this.vm.connectEffect(
       this.fetchUsersEffect$
         .pipe(
           tap(() => this.vm.setState({loading: true})),
@@ -42,7 +56,7 @@ export class StateServiceV2Component implements OnInit {
         )
     );
 
-    vm.connectEffect(
+    this.vm.connectEffect(
       this.addUserEvent$
         .pipe(
           tap(() => this.vm.setState({ adding: true })),
@@ -50,22 +64,24 @@ export class StateServiceV2Component implements OnInit {
           tap(() => this.vm.setState({ adding: false })),
           tap(() => this.fetchUsersEffect$.next())
         )
-    )
+    );
 
-    vm.connectEffect(
-      this.fetchUsersEffect$
+    this.vm.connectEffect(
+      this.clearUsersEffect$
         .pipe(
-          tap(() => this.vm.setState({loading: true})),
-          flatMap(() => this.userService.get()),
-          map(users => this.vm.setState({ loading: false, users }))
+          tap(() => this.vm.setState({ users: [] })),
         )
     );
-  }
 
-  ngOnInit() {
-    this.vm.setState(initialState);
-
-    this.fetchUsersEffect$.next();
+    this.vm.connectEffect(
+      this.deleteUserEvent$
+        .pipe(
+          tap(user => this.vm.setState({ deletingUserId: user.id })),
+          flatMap(user => this.userService.delete(user)),
+          tap(() => this.vm.setState({ deletingUserId: undefined })),
+          tap(() => this.fetchUsersEffect$.next())
+        )
+    )
   }
 
 }

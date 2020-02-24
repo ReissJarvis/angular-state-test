@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { delay, map, tap } from 'rxjs/operators';
+import { delay, map, mapTo, tap } from 'rxjs/operators';
 
 import { User } from '../shared/models/user.model';
 import { RandomUserGenerator } from './random-user.generator';
@@ -32,11 +32,20 @@ export class UserService {
       .pipe(
         delay(2000),
         tap(() => this._usersApiStub.push(u)),
+        mapTo(u)
+      );
+  }
+
+  delete(u: User): Observable<User> {
+    return of(undefined)
+      .pipe(
+        delay(2000),
+        tap(() => this._usersApiStub = this._usersApiStub.filter(x => x.id !== u.id)),
         map(() => u)
       );
   }
 
-  //method to just populate the fake member stub data
+  //method to just populate the fake user stub data
   _populateStubData(length: number) {
     this._usersApiStub = [];
 
