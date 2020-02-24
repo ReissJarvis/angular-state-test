@@ -2,6 +2,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { ConnectableObservable, merge, Observable, OperatorFunction, pipe, queueScheduler, Subject, Subscription } from 'rxjs';
 import { distinctUntilChanged, filter, map, mergeAll, observeOn, publishReplay, scan, shareReplay } from 'rxjs/operators';
 import { pipeFromArray } from 'rxjs/internal/util/pipe';
+import { MatSnackBar } from '@angular/material';
 
 export function select<T>(...ops: OperatorFunction<T, any>[]) {
   return pipe(
@@ -30,7 +31,7 @@ export class StateV2Service<T> implements OnDestroy {
     publishReplay(1)
   );
 
-  constructor() {
+  constructor(private snackbar: MatSnackBar) {
     this._subscription.add((this._state$ as ConnectableObservable<T>).connect());
     this._subscription.add((this._effectSubject
       .pipe(mergeAll(), publishReplay(1)
@@ -88,7 +89,7 @@ export class StateV2Service<T> implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    console.log("destroyed")
+    this.snackbar.open('State service v2 destroyed', '', { duration: 2000 })
     this._subscription.unsubscribe();
   }
 }

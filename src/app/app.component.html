@@ -8,10 +8,10 @@
              [opened]="(isHandset$ | async) === false">
   <mat-toolbar>Menu</mat-toolbar>
   <mat-nav-list>
-    <a mat-list-item href="v1">
+    <a mat-list-item [routerLink]="'v1'">
       <mat-icon>storage</mat-icon> Version 1
     </a>
-    <a mat-list-item href="v2">
+    <a mat-list-item [routerLink]="'v2'">
       <mat-icon>view_quilt</mat-icon> Version 2
     </a>
   </mat-nav-list>

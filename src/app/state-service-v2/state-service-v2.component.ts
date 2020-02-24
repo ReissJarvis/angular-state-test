@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { StateV2Service } from './state-v2.service';
-import { flatMap, map, tap } from 'rxjs/operators';
+import { filter, flatMap, map, tap } from 'rxjs/operators';
 import { stringify } from 'querystring';
 import { RandomUserGenerator } from './random-user.generator';
 import { UserService } from './user.service';
 import { User } from '../shared/models/user.model';
 import { Observable, Subject } from 'rxjs';
+import { MatDialog } from '@angular/material';
+import { ConfirmationDialogComponent, ConfirmationDialogData } from './components/confirmation-dialog/confirmation-dialog.component';
 
 interface V2PageState {
   loading: boolean;
@@ -34,7 +36,11 @@ export class StateServiceV2Component implements OnInit {
   deleteUserEvent$ = new Subject<User>();
 
 
-  constructor(private vm: StateV2Service<V2PageState>, private userService: UserService) {
+  constructor(
+    private vm: StateV2Service<V2PageState>,
+    private userService: UserService,
+    private dialog: MatDialog
+  ) {
     this.userService._populateStubData(3);
   }
 
@@ -76,6 +82,16 @@ export class StateServiceV2Component implements OnInit {
     this.vm.connectEffect(
       this.deleteUserEvent$
         .pipe(
+          flatMap(user =>
+            this.dialog
+              .open(ConfirmationDialogComponent, {
+                data: {
+                  user
+                } as ConfirmationDialogData
+              })
+              .afterClosed()
+          ),
+          filter(confirmDelete => !!confirmDelete),
           tap(user => this.vm.setState({ deletingUserId: user.id })),
           flatMap(user => this.userService.delete(user)),
           tap(() => this.vm.setState({ deletingUserId: undefined })),

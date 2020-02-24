@@ -16,10 +16,15 @@
             <mat-icon mat-list-icon>face</mat-icon>
             <h4 mat-line>{{user.name}}</h4>
             <p mat-line> {{user.email}} | {{user.dateAdded | date}} </p>
-            <mat-icon *ngIf="vm.deletingUserId !== user.id else deleting" style="cursor: pointer" (click)="this.deleteUserEvent$.next(user)">delete</mat-icon>
+
+            <mat-icon *ngIf="vm.deletingUserId !== user.id else deleting" style="cursor: pointer"
+                      (click)="this.deleteUserEvent$.next(user)">
+              delete
+            </mat-icon>
             <ng-template #deleting>
               <mat-spinner [diameter]="20" strokeWidth="2"></mat-spinner>
             </ng-template>
+
           </mat-list-item>
         </mat-list>
 
